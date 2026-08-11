@@ -524,7 +524,19 @@ section { padding: 78px 0; }
   gap: 48px;
   align-items: start;
 }
-@media (max-width: 860px) { .about-hero { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .about-hero {
+    display: flex;              /* grid এর বদলে flex */
+    flex-direction: column;     /* উপরে image, নিচে text */
+    gap: 24px;
+  }
+  .about-photo img {
+    width: 100%;
+    height: auto;               /* auto height */
+    object-fit: cover;
+  }
+}
+
 .about-photo {
   border-radius: var(--radius);
   overflow: hidden;
