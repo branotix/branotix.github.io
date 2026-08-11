@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Pulock Kumar</title>
+<meta name="description" content="Projects by Pulock Kumar — Branotix mentorship platform, branded video platform, Go backend experiments, and algorithm practice, built with Go and PostgreSQL.">
+<link rel="canonical" href="https://branotix.github.io/projects.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Projects — Pulock Kumar">
+<meta property="og:description" content="Branotix, backend experiments in Go, and algorithm practice — a look at what I've built.">
+<meta property="og:image" content="https://branotix.github.io/images/og-cover.jpg">
+<meta property="og:url" content="https://branotix.github.io/projects.html">
+
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0a0e17">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand"><span class="badge">PK</span>Pulock Kumar</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">Menu</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html" aria-current="page">Projects</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="index.html">Home</a> / Projects</p>
+      <p class="eyebrow">[BUILD LOG]</p>
+      <h1>Everything I've shipped, and everything still compiling.</h1>
+      <p>From production platforms down to small algorithm drills — this is the full trail, not just the highlight reel.</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 20px;">
+    <div class="container">
+      <div class="filter-row" id="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="platform">Platforms</button>
+        <button class="filter-btn" data-filter="systems">Systems</button>
+        <button class="filter-btn" data-filter="algorithms">Algorithms &amp; Practice</button>
+      </div>
+      <div class="grid-3" id="project-grid"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-band" data-reveal>
+        <p class="eyebrow" style="justify-content:center;">[MORE]</p>
+        <h2>The full commit history lives on GitHub</h2>
+        <p style="max-width:52ch;margin:12px auto 26px;">Smaller experiments, forks, and work-in-progress branches that don't make it to this page yet.</p>
+        <a class="btn btn-primary" href="https://github.com/branotix" target="_blank" rel="noopener">Visit GitHub profile</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-log"><span class="ok">●</span> process exited 0 — built by Pulock Kumar, © <span data-year></span></div>
+      <div class="footer-socials">
+        <a class="icon-link" href="https://github.com/branotix" target="_blank" rel="noopener" aria-label="GitHub"></a>
+        <a class="icon-link" href="https://www.linkedin.com/in/pulockkumar" target="_blank" rel="noopener" aria-label="LinkedIn"></a>
+        <a class="icon-link" href="contact.html" aria-label="Contact"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/projects-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.querySelectorAll(".icon-link[aria-label='GitHub']").forEach(e => e.innerHTML = ICONS.github);
+  document.querySelectorAll(".icon-link[aria-label='LinkedIn']").forEach(e => e.innerHTML = ICONS.linkedin);
+  document.querySelectorAll(".icon-link[aria-label='Contact']").forEach(e => e.innerHTML = ICONS.mail);
+
+  const statusLabel = { live: "Live", dev: "In development", oss: "Open source" };
+  const grid = document.getElementById("project-grid");
+
+  function renderProjects(filter) {
+    grid.innerHTML = "";
+    const list = filter === "all" ? PROJECTS : PROJECTS.filter(p => p.tag === filter);
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">// no projects tagged "${filter}" yet</div>`;
+      return;
+    }
+    list.forEach(p => {
+      const links = [];
+      if (p.links.live) links.push(`<a href="${p.links.live}" target="_blank" rel="noopener">${ICONS.external} Visit site</a>`);
+      if (p.links.github) links.push(`<a href="${p.links.github}" target="_blank" rel="noopener">${ICONS.github} Source</a>`);
+      const el = document.createElement("div");
+      el.className = "proj-card";
+      el.innerHTML = `
+        <div class="top-row">
+          <h3>${p.title}</h3>
+          <span class="proj-status ${p.status}">${statusLabel[p.status]}</span>
+        </div>
+        <p>${p.summary}</p>
+        <div class="tag-row">${p.stack.map(s => `<span class="tag">${s}</span>`).join("")}</div>
+        <div class="proj-links">${links.join("")}</div>
+      `;
+      grid.appendChild(el);
+    });
+  }
+
+  document.getElementById("filters").addEventListener("click", (e) => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderProjects(btn.dataset.filter);
+  });
+
+  renderProjects("all");
+</script>
+</body>
+</html>

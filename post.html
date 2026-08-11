@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Post — Pulock Kumar</title>
+<meta name="description" id="page-desc" content="A post from Pulock Kumar's build log.">
+<link rel="canonical" id="page-canonical" href="https://branotix.github.io/post.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" id="og-title" content="Post — Pulock Kumar">
+<meta property="og:description" id="og-desc" content="A post from Pulock Kumar's build log.">
+<meta property="og:image" id="og-image" content="https://branotix.github.io/images/og-cover.jpg">
+
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0a0e17">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="brand"><span class="badge">PK</span>Pulock Kumar</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">Menu</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="blog.html" aria-current="page">Blog</a></li>
+      <li><a href="contact.html" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero" style="padding-bottom:0;">
+    <div class="container" id="post-wrap">
+      <div class="post-narrow">
+        <p class="breadcrumb"><a href="index.html">Home</a> / <a href="blog.html">Blog</a> / <span id="crumb-title">Post</span></p>
+        <div id="post-content-target">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="post-narrow">
+        <hr class="divider">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow">[MORE]</p>
+            <h2>More from the log</h2>
+          </div>
+          <a class="btn btn-outline" href="blog.html">All posts →</a>
+        </div>
+      </div>
+      <div class="grid-3" id="more-posts"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-log"><span class="ok">●</span> process exited 0 — built by Pulock Kumar, © <span data-year></span></div>
+      <div class="footer-socials">
+        <a class="icon-link" href="https://github.com/branotix" target="_blank" rel="noopener" aria-label="GitHub"></a>
+        <a class="icon-link" href="https://www.linkedin.com/in/pulockkumar" target="_blank" rel="noopener" aria-label="LinkedIn"></a>
+        <a class="icon-link" href="contact.html" aria-label="Contact"></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/icons.js"></script>
+<script src="js/posts-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.querySelectorAll(".icon-link[aria-label='GitHub']").forEach(e => e.innerHTML = ICONS.github);
+  document.querySelectorAll(".icon-link[aria-label='LinkedIn']").forEach(e => e.innerHTML = ICONS.linkedin);
+  document.querySelectorAll(".icon-link[aria-label='Contact']").forEach(e => e.innerHTML = ICONS.mail);
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("slug");
+  const post = POSTS.find(p => p.slug === slug);
+  const target = document.getElementById("post-content-target");
+
+  if (!post) {
+    target.innerHTML = `
+      <div class="empty-state">
+        // post not found — it may have been renamed or removed.
+        <div style="margin-top:16px;"><a class="btn btn-primary" href="blog.html">Back to blog</a></div>
+      </div>
+    `;
+  } else {
+    document.title = post.title + " — Pulock Kumar";
+    document.getElementById("page-title").textContent = post.title + " — Pulock Kumar";
+    document.getElementById("page-desc").setAttribute("content", post.summary);
+    document.getElementById("page-canonical").setAttribute("href", `https://branotix.github.io/post.html?slug=${post.slug}`);
+    document.getElementById("og-title").setAttribute("content", post.title);
+    document.getElementById("og-desc").setAttribute("content", post.summary);
+    document.getElementById("og-image").setAttribute("content", `https://branotix.github.io/${post.cover}`);
+    document.getElementById("crumb-title").textContent = post.title;
+
+    target.innerHTML = `
+      <p class="eyebrow">[LOG ENTRY]</p>
+      <h1>${post.title}</h1>
+      <p class="badge-pill">${ICONS.clock} ${post.displayDate}</p>
+      <img class="post-hero-img" src="${post.cover}" alt="${post.title}">
+      <div class="post-content">${post.content}</div>
+    `;
+
+    const more = document.getElementById("more-posts");
+    POSTS.filter(p => p.slug !== post.slug).slice(0, 3).forEach(p => {
+      const el = document.createElement("a");
+      el.href = `post.html?slug=${p.slug}`;
+      el.className = "post-card";
+      el.innerHTML = `
+        <img src="${p.cover}" alt="${p.title}" loading="lazy">
+        <div class="post-body">
+          <span class="post-date">${p.displayDate}</span>
+          <h3>${p.title}</h3>
+          <span class="post-read">Read post ${ICONS.arrowRight}</span>
+        </div>
+      `;
+      more.appendChild(el);
+    });
+    if (!more.children.length) {
+      more.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">// this is the only post so far</div>`;
+    }
+  }
+</script>
+</body>
+</html>
